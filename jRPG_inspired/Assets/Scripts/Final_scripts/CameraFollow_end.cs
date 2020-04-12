@@ -11,7 +11,7 @@ public class CameraFollow_end : MonoBehaviour
     private Vector3 offset = new Vector3(0f, 0f, -10f); //set z default so that it isn't at the same level as the scene
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // Set camera to position of player with variable offset
         transform.position = new Vector3(followThisGameObject.position.x + offset.x, followThisGameObject.position.y + offset.y, offset.z);

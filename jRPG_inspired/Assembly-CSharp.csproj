@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement_End.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/n8mcc/Documents/GitHub/jRPG/jRPG_inspired/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

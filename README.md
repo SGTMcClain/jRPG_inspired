@@ -1,5 +1,5 @@
 # jRPG_inspired
-A game inspired by jRPGs to teach basics in Unity Game Development and 
+A game inspired by jRPGs to teach basics in Unity Game Development and C# programming
 
 
 ## Assets
@@ -19,3 +19,9 @@ https://pipoya.itch.io/pipoya-free-rpg-world-tileset-32x32-40x40-48x48
 
 https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32
 
+**Kyrise's Free 16x16 rpg icon pack**
+
+**Author: Kyrise**
+![Image of RPG Icon Pack](https://img.itch.zone/aW1nLzE0MDY4ODQucG5n/original/JXizVY.png)
+
+https://kyrise.itch.io/kyrises-free-16x16-rpg-icon-pack

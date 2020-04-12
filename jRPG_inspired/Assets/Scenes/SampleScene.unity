@@ -1744,7 +1744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33382b74f784ec14191d9636493ea398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1338600377}
+  followThisGameObject: {fileID: 1338600377}
   offset: {x: 0, y: 0, z: -10}
 --- !u!20 &519420031
 Camera:
@@ -7539,7 +7539,7 @@ GameObject:
   - component: {fileID: 1338600380}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

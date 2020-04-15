@@ -207,7 +207,7 @@ Consumables need HPGain & MPGain
 Weapons needs Type, MinDamage, MaxDamage
 Armor needs Type, ArmorBonus, Resistance
 
-So the weapon class would look something like
+So the weapon class would look something like:
 
 ```csharp
 public class Weapon : Item

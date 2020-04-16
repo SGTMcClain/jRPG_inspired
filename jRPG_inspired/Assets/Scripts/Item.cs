@@ -1,54 +1,36 @@
-﻿public class Item
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Item
 {
-    // What properties should an item have in an RPG?
+    public string name;  // Item Name
+    public string description;  // Item Description
+    public int cost; // Item Cost
 
-    // Item Name
-    private string name; 
-    public string Name 
+    public Item()  //Generic Constructor, A constructor that takes no arguments
     {
-        get{return name;}
-        set{name = value;}
+        name = "Rock";
+        description = "A rock";
+        cost = 6;
     }
 
-    // Item Cost
-    private int cost;
-    public int Cost 
-    {
-        get{return cost;} 
-        set{cost = value;}
-    }
-
-    // Item Description
-    private string description;
-
-    public string Description
-    {
-        get {return description;}
-        set {description = value;}
-    }
-
-
-
-    public Item()
-    {
-        name = "Stick";
-        cost = 2;
-        description = "It's a stick";
-    }
-
-    public Item(string aName, int aCost)
+    public Item(string aName, int aCost) // A constructor that takes 2 arguments
     {
         name = aName;
         cost = aCost;
-        description = name + " has no description yet.";
+        description = name + " was not given a description.";
     }
 
-    /** Sell
-    * Method to Sell items at half cost
-    */
+    public Item(string aName, int aCost, string aDescription)
+    {
+        name = aName;
+        cost = aCost;
+        description = aDescription;
+    }
+
     public int Sell()
     {
-        return cost/2;
+        return cost / 2;
     }
-    
 }

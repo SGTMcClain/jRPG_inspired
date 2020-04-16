@@ -63,6 +63,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Armor.cs" />
+    <Compile Include="Assets\Scripts\Consumable.cs" />
     <Compile Include="Assets\Scripts\Final_scripts\CameraFollow_end.cs" />
     <Compile Include="Assets\Scripts\Final_scripts\PlayerMovement_End.cs" />
     <Compile Include="Assets\Scripts\Item.cs" />

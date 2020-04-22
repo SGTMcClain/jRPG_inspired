@@ -4,11 +4,191 @@ A game inspired by old school jRPGs to teach basics in Unity Game Development an
 
 This project makes use of:
 
-* tilesets
-* spritesheets
-* basic c# classes
+* [Spritesheets](#assets)
+* [Basic c# classes](#a-basic-class)
+* [UI Panel and Text](#ui-panel-and-text)
+* [Save & Load](#save-and-load)
 
-## A basic class
+## April 22, 2020
+
+### UI Panel and Text
+
+We are going to create a simple UI Panel and Text that will display the players X and Y location on screen and make the panel appear and disappear on a button press
+
+**Setting Up The UI**
+1. Add a UI Panel element
+2. Click 'Canvas' and In the inspector Change the Canvas Render Mode to "Screen Space - Camera"
+3. Drag the Main Camera onto the Render Camera
+4. Set the Order in Layer to something large like 50
+5. Click 'Panel' and In the inspector click Color in the Image Component
+6. Set the Alpha "A" to 255
+7. In the inspector set the Bottom in the Rect Transform to 450
+8. Add a UI Text element to your scene and nest it as a child to the Panel
+9. Duplicate the UI Text element
+10. Change the names of the two Text elements under Canvas to "Display_X_Text" and "Display_Y_Text"
+11. In the inspector change the Text to "Display X" and "Display Y" respectively.
+12. Set "Display_X_Text" to Pos X: -300
+13. Set "Display_X_Text" to Pos Y: 250
+14. Set "Display_X_Text" to Pos X: -300
+15. Set "Display_X_Text" to Pos Y: 200
+16. Create an empty Game Object and name it GameManager
+17. Create a new script and name it GameManager (This will turn the script into a gear)
+18. Drag the GameManager script onto the GameManager GameObject
+19. Open the Game Manager Script in your IDE (Visual Studio)
+20. At the very top of the script add
+    ```csharp
+    using UnityEngine.UI;
+    ```
+21. After the class declaration right inside the first curly braces add
+    ```csharp
+    public GameObject player;
+    public Text displayX;
+    public Text displayY;
+    ```
+22. Inside void Update() Add
+    ```csharp
+    string xText = player.transform.position.x.ToString();
+    string yText = player.transform.position.y.ToString();
+    displayX.text = "X: " + xText;
+    displayY.text = "Y: " + yText;
+    ```
+23. Click on the GameManager game object and drag Display_X_Text into Display X in the inspector
+24. Drag Display_Y_Text into Display Y in the inspector
+25. Drag the Player onto Player in the inspector
+26. Test your scene
+27. After everything is working lets move the code we just wrote to a method named Update_XY() underneath the Update() Method like this:
+
+    ```csharp
+    void Update_XY()
+    {
+        string xText = player.transform.position.x.ToString();
+        string yText = player.transform.position.y.ToString();
+        displayX.text = "X: " + xText;
+        displayY.text = "Y: " + yText;
+    }
+    ```
+
+28. In the Update() method add:
+
+    ```csharp
+    Update_XY();
+    ```
+
+    This helps us keep the Update method clean and our code reusable
+
+**Hiding The UI Panel**
+
+Now we don't want to always display this information so lets hide it with a button press.
+
+1. Rename the Canvas to TopUI_Canvas
+2. Directly under Text displayY Add:
+    ```csharp
+    public Canvas TopUI;
+   ```
+3. Then in Update() Add:
+   ```csharp
+    if (Input.GetKeyDown(KeyCode.M))
+    {
+        //Toggle TopUI
+        if (!TopUI.activeSelf)
+        {
+            TopUI.SetActive(true);
+        }
+        else
+        {
+            TopUI.SetActive(false);
+        }
+    }
+   ```
+This sets the GameManager up to listen for the user to press 'M' and when it hears it our script checks if the TopUI is active and then turns it off if it is active or turns it on if it is inactive.
+4. Lets turn off the TopUI_Canvas by clearing the check mark next to its name in the inspector.
+5. Lets test to see if our code execute properly
+6. If everything went well lets clean up the Update() method again by creating a ToggleCanvas() method
+
+```csharp
+    void ToggleCanvas()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            // Toggle Top UI
+            if (!TopUI.activeSelf) // if the Top UI is not active
+            {
+                TopUI.SetActive(true); // Show the Canvas
+            }
+            else
+            {
+                TopUI.SetActive(false); // Hide the Canvas
+            }
+
+        }
+    }
+```
+
+7. And placing the statement we just wrote into that method
+
+    ```csharp
+    ToggleCanvas();
+    ```
+
+### Save and Load
+
+**Getting Setup**
+
+1. Lets make the TopUI_Canvas active again by checking the box next to it's name in the inspector
+2. Add a UI Button
+3. Press the arrow and then click text and change the Text(Script) in the inspector to Save.  Also change the Button name from Button to Save_Button
+4. Duplicate Save_Button and change the Text Script to Load and change the Button name from Save_Button to Load_Button
+5. Set Save_Button Pos X to 300 and Pos Y to 250
+6. Set Load Button Pos X to 300 and Pos Y to 200
+
+#### PlayerPrefs
+
+[Unity PlayerPref Documentation](https://docs.unity3d.com/ScriptReference/PlayerPrefs.html?_ga=2.202986198.637285251.1587509263-628809777.1585687538)
+
+Playerprefs in Unity are a built in way of storing basic string, int, and/or float data from your games in a way that is accessible to any platform that Unity runs on.
+
+We will need a Save() Function and a Load() Function in the GameManager script
+
+```csharp
+    public void Save()
+    {
+        float xPosition = player.transform.position.x;
+        float yPosition = player.transform.position.y;
+
+
+        PlayerPrefs.SetFloat(PP_xPOSITION_STRING, xPosition);
+        PlayerPrefs.SetFloat(PP_yPOSITION_STRING, yPosition);
+
+        Debug.Log("Player Prefs Saved : x = " + xPosition + " y = " + yPosition);
+    }
+```
+
+```csharp
+    public void Load()
+    {
+        float load_x = PlayerPrefs.GetFloat(PP_xPOSITION_STRING);
+        float load_y = PlayerPrefs.GetFloat(PP_yPOSITION_STRING);
+
+        Vector2 loadPlayer = new Vector2(load_x, load_y);
+
+        player.transform.position = loadPlayer;
+        Debug.Log("Player Prefs Loaded!");
+    }
+```
+
+Now go back to your Save_Button in the Button(Script) Component in the inspector look for the "On Click ()" box, click the plus button, then drag the GameManager GameObject onto the open spot. That should activate the dropdown that shows "No Function"
+
+Next press the "No Function" dropdown and Select GameManager -> Save().  Then repeat this process for the Load_Button selecting Load().
+
+Thats it you are now saving and loading from player prefs.  You can add more properties to this setup if you choose.
+
+Make sure to make the canvas inactive again so that it hidden when you start your game.
+
+### Scriptable Object intro
+
+## April 15, 2020
+
+### A basic class
 
 Item.cs othewise known as the class (does not need to be in the scene)
 
@@ -112,7 +292,7 @@ Debug.Log(myItem.Name + " is worth " + myItem.Sell() + " at a merchant.");
 ```
 
 
-## Constructors
+### Constructors
 
 
  Constructors are used to initialize objects in specific ways.
@@ -195,7 +375,7 @@ to
 
 Then play your scene again and it should show that items name is Rock, it Cost 6 and it is worth 3 at a vendor
 
-## Inheritance
+### Inheritance
 
 We have done basic items but what about other items that we could have in an inventory like Consumables, Weapons (Swords, Axes, Staffs, Wands), and Armor. Each one of these categories is a bit unique and will require different properties.
 
@@ -223,7 +403,7 @@ public class Weapon : Item
     }
 }
 ```
-
+-----------------
 ## Assets
 
 **Free RPG World Tileset 32 x 32, 40 x 40, 48 x 48**

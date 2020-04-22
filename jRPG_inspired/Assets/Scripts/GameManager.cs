@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    // Instance GameManager as a singleton
+    public static GameManager instance = null;
+
     readonly string PP_xPOSITION_STRING = "savedPositionX";
     readonly string PP_yPOSITION_STRING = "savedPositionY";
 
@@ -13,6 +16,15 @@ public class GameManager : MonoBehaviour
     public Text displayY;
 
     public GameObject TopUI;
+
+    private void Awake()
+    {
+        // If the GameManager isn't created then create it.
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

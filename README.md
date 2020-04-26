@@ -9,6 +9,160 @@ This project makes use of:
 * [UI Panel and Text](#ui-panel-and-text)
 * [Save & Load](#save-and-load)
 
+## April 29, 2020
+### Scriptable Object intro
+[Based On Unity3D - Inventory System w/Scriptable Objects by Coding with Unity](https://youtu.be/_IqTeruf3-s)
+
+1. Create a new script called "ItemObject" and make it an abstract class and make it of type ScriptableObject
+    ```csharp
+    public abstract class ItemObject : ScriptableObject
+    {
+     
+    }
+   ```
+   as an abstract class this class can never be used, it is just a model for our base items.
+2. Add an enumerated class at the top of script file called ItemType.  Your file should look like this
+   ```csharp
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+
+    public enum ItemType
+    {
+        Consumable,
+        Weapon,
+        Armor,
+        Default
+
+    }
+    public abstract class ItemObject : ScriptableObject
+    {
+        
+    }
+   ```
+   1. Add a public Sprite named image, A public ItemType named type, a public int called cost, and a public string called description. Over description add "[TextArea(15,20)]" to establish a text area that is large enough in the inspector to fit a length description
+   ```csharp
+    public abstract class ItemObject : ScriptableObject
+    {
+        public Sprite image;
+        public ItemType type;
+        public int cost;
+        [TextArea(15, 20)]
+        public string description;
+        
+    }
+
+   ```
+3. Create a new script called DefaultItem
+4. Remove the Start() and Update Classes
+5. Replace Monobehavior with ScriptableObject
+6. Above the class name add:
+   ```csharp
+   [CreateAssetMenu(fileName = "New Default Item", menuName = "Inventory System/Items/Default")]
+   ```
+   This will allow us to create a new Default Item from the Create Menu in the Unity Editor
+7. Next we want to make sure the item type is set to Default every time we create this object and we will do that by adding the Awake() function to the DefaultItem class and having the type = ItemType.Default
+   ```csharp
+    public void Awake()
+    {
+        type = ItemType.Default;
+    }
+   ```
+
+8. We can test this out by going to our Scriptable objects folder right clicking and going to Inventory System -> Items -> Default and then giving the new object a name a description and an image from your spritesheet.
+   
+9. Add another script for your ConsumableItem... It should be the same as the DeafultItem Class but add public ints for restoring health and magic values
+    ```csharp
+    [CreateAssetMenu(fileName = "New Consumable Item", menuName = "Inventory System/Items/Consumable")]
+    public class ConsumableItem : ItemObject
+    {
+        public int restoreHealthValue;
+        public int restoreMagicValue;
+        public void Awake()
+        {
+            type = ItemType.Consumable;
+        }
+    }
+    ```
+10. We could continue to make more items like Weapon or Armor in this same manner.
+11. Now we need to create an inventory for all of this stuff to go in so in the ScriptableObjects and add an Inventory folder then inside the Inventory folder add a Scripts folder
+12. inside of scipts create a new script called InventoryObject and replace Monobehavior with ScriptableObject then delete Start() and Update()
+13. Add:
+```csharp
+public List<InventorySlot> Container = new List<InventorySlot>();
+```
+To InventoryObject 
+14. Below the final closing bracket of InventoryObject create a new class called InventorySlot with the properties public ItemObject call item and a public in called amount.
+```csharp
+public class InventorySlot
+{
+    public ItemObject item;
+    public int amount;
+}
+```
+
+15. Directly above InventorySlot add [System.Serializable] so that you can see Inventory Slot in the inspector
+16. Add a constructor that takes two arguments of ItemObject named item and int name amount, then assign those arguments to the classes variables
+
+```csharp
+    public InventorySlot(ItemObject item, int amount)
+    {
+        this.item = item;
+        this.amount = amount;
+    }
+```
+
+17. Add a method to the InventorySlot class called AddAmount with one argument, an int called value. Inside the method should be amount += value.
+
+```csharp
+    public void AddAmount(int value)
+    {
+        amount += value;
+    }
+```
+
+18. Then create a method called AddItem with 2 arguments an ItemObject called _item and an int called _amount.
+19. Inside add item will be a bool called hasItem and set it to false
+
+```csharp
+    bool hasItem = false;
+```
+
+20. Inside AddItem a for loop to test if the container already has one of the items, if it does then change hasItem to true then break out of the loop.
+21. If it doesn't contain one of the items after the loop write an if statement where if hasItem is false you add a new inventory slot with the _item and _amount as arguments
+22. The entire AddItem should look like this when you are done.
+
+```csharp
+    public void AddItem(ItemObject _item, int _amount)
+    {
+        // Check  if item is in the inventory
+        bool hasItem = false;
+        for(int i = 0; i < Container.Count; i++)
+        {
+            if(Container[i].item == _item)
+            {
+                Container[i].AddAmount(_amount);
+                hasItem = true;
+                break;
+            }
+        }
+        if(!hasItem)
+        {
+            Container.Add(new InventorySlot(_item, _amount));
+        }
+    }
+```
+
+23. Create a new menu item by adding:
+
+```csharp
+    [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
+```
+On top of the InventoryObject class
+
+24. Now you can create a new Inventory inside your inventory folder and call it "PlayerInventory"
+
+
 ## April 22, 2020
 
 ### UI Panel and Text
@@ -184,159 +338,7 @@ Thats it you are now saving and loading from player prefs.  You can add more pro
 
 Make sure to make the canvas inactive again so that it hidden when you start your game.
 
-### Scriptable Object intro
-[Based On Unity3D - Inventory System w/Scriptable Objects by Coding with Unity](https://youtu.be/_IqTeruf3-s)
 
-1. Create a new script called "ItemObject" and make it an abstract class and make it of type ScriptableObject
-    ```csharp
-    public abstract class ItemObject : ScriptableObject
-    {
-     
-    }
-   ```
-   as an abstract class this class can never be used, it is just a model for our base items.
-2. Add an enumerated class at the top of script file called ItemType.  Your file should look like this
-   ```csharp
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-
-    public enum ItemType
-    {
-        Consumable,
-        Weapon,
-        Armor,
-        Default
-
-    }
-    public abstract class ItemObject : ScriptableObject
-    {
-        
-    }
-   ```
-   1. Add a public Sprite named image, A public ItemType named type, a public int called cost, and a public string called description. Over description add "[TextArea(15,20)]" to establish a text area that is large enough in the inspector to fit a length description
-   ```csharp
-    public abstract class ItemObject : ScriptableObject
-    {
-        public Sprite image;
-        public ItemType type;
-        public int cost;
-        [TextArea(15, 20)]
-        public string description;
-        
-    }
-
-   ```
-3. Create a new script called DefaultItem
-4. Remove the Start() and Update Classes
-5. Replace Monobehavior with ScriptableObject
-6. Above the class name add:
-   ```csharp
-   [CreateAssetMenu(fileName = "New Default Item", menuName = "Inventory System/Items/Default")]
-   ```
-   This will allow us to create a new Default Item from the Create Menu in the Unity Editor
-7. Next we want to make sure the item type is set to Default every time we create this object and we will do that by adding the Awake() function to the DefaultItem class and having the type = ItemType.Default
-   ```csharp
-    public void Awake()
-    {
-        type = ItemType.Default;
-    }
-   ```
-
-8. We can test this out by going to our Scriptable objects folder right clicking and going to Inventory System -> Items -> Default and then giving the new object a name a description and an image from your spritesheet.
-   
-9. Add another script for your ConsumableItem... It should be the same as the DeafultItem Class but add public ints for restoring health and magic values
-    ```csharp
-    [CreateAssetMenu(fileName = "New Consumable Item", menuName = "Inventory System/Items/Consumable")]
-    public class ConsumableItem : ItemObject
-    {
-        public int restoreHealthValue;
-        public int restoreMagicValue;
-        public void Awake()
-        {
-            type = ItemType.Consumable;
-        }
-    }
-    ```
-10. We could continue to make more items like Weapon or Armor in this same manner.
-11. Now we need to create an inventory for all of this stuff to go in so in the ScriptableObjects and add an Inventory folder then inside the Inventory folder add a Scripts folder
-12. inside of scipts create a new script called InventoryObject and replace Monobehavior with ScriptableObject then delete Start() and Update()
-13. Add:
-```csharp
-public List<InventorySlot> Container = new List<InventorySlot>();
-```
-To InventoryObject 
-14. Below the final closing bracket of InventoryObject create a new class called InventorySlot with the properties public ItemObject call item and a public in called amount.
-```csharp
-public class InventorySlot
-{
-    public ItemObject item;
-    public int amount;
-}
-```
-
-15. Directly above InventorySlot add [System.Serializable] so that you can see Inventory Slot in the inspector
-16. Add a constructor that takes two arguments of ItemObject named item and int name amount, then assign those arguments to the classes variables
-
-```csharp
-    public InventorySlot(ItemObject item, int amount)
-    {
-        this.item = item;
-        this.amount = amount;
-    }
-```
-
-17. Add a method to the InventorySlot class called AddAmount with one argument, an int called value. Inside the method should be amount += value.
-
-```csharp
-    public void AddAmount(int value)
-    {
-        amount += value;
-    }
-```
-
-18. Then create a method called AddItem with 2 arguments an ItemObject called _item and an int called _amount.
-19. Inside add item will be a bool called hasItem and set it to false
-
-```csharp
-    bool hasItem = false;
-```
-
-20. Inside AddItem a for loop to test if the container already has one of the items, if it does then change hasItem to true then break out of the loop.
-21. If it doesn't contain one of the items after the loop write an if statement where if hasItem is false you add a new inventory slot with the _item and _amount as arguments
-22. The entire AddItem should look like this when you are done.
-
-```csharp
-    public void AddItem(ItemObject _item, int _amount)
-    {
-        // Check  if item is in the inventory
-        bool hasItem = false;
-        for(int i = 0; i < Container.Count; i++)
-        {
-            if(Container[i].item == _item)
-            {
-                Container[i].AddAmount(_amount);
-                hasItem = true;
-                break;
-            }
-        }
-        if(!hasItem)
-        {
-            Container.Add(new InventorySlot(_item, _amount));
-        }
-    }
-```
-
-23. Create a new menu item by adding:
-
-```csharp
-    [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
-```
-On top of the InventoryObject class
-
-24. Now you can create a new Inventory inside your inventory folder and call it "PlayerInventory"
-
-**Will continue April 29, 2020**
 ## April 15, 2020
 
 ### A basic class

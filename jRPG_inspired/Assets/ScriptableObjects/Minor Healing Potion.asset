@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 10
   type: 0
+  prefab: {fileID: 1349370366350218439, guid: fb37c4dd4fbe982429be6d01be2e6327, type: 3}
   image: {fileID: -5661068539894965298, guid: 0c0e10f633d07584d9dff71eed133580, type: 3}
   description: Minor Healing Potion revives 10 health
   healthRegen: 10

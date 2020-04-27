@@ -6,6 +6,7 @@ public abstract class ItemObject : ScriptableObject
 {
     public int cost;
     public ItemType type;
+    public GameObject prefab;
     public Sprite image;
     [TextArea(15, 20)]
     public string description;

@@ -63,8 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Armor.cs" />
-    <Compile Include="Assets\Scripts\Consumable.cs" />
+    <Compile Include="Assets\ScriptableObjects\Inventory\Scripts\InventoryObject.cs" />
     <Compile Include="Assets\Scripts\ConsumableItem.cs" />
     <Compile Include="Assets\Scripts\DefaultItem.cs" />
     <Compile Include="Assets\Scripts\Final_scripts\CameraFollow_end.cs" />
@@ -74,8 +73,8 @@
     <Compile Include="Assets\Scripts\Item.cs" />
     <Compile Include="Assets\Scripts\ItemObject.cs" />
     <Compile Include="Assets\Scripts\PlayerInventory.cs" />
+    <Compile Include="Assets\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\Weapon.cs" />
     <Compile Include="Assets\Scripts\WeaponItem.cs" />
     <None Include="Assets\Sprites\Kyrise's 16x16 RPG Icon Pack - V1.2\read me.txt" />
     <Reference Include="Unity.Timeline.Editor">

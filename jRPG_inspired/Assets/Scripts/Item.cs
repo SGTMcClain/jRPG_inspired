@@ -1,37 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.IO;
 
 [System.Serializable]
-public class Item
+public class Item : MonoBehaviour
 {
-    public string name;  // Item Name
-    public string description;  // Item Description
-    public int cost; // Item Cost
+    public ItemObject item;
 
-    public Item()  //Generic Constructor, A constructor that takes no arguments
+    private void Awake()
     {
-        name = "Rock";
-        description = "A rock";
-        cost = 6;
-    }
+        if (item.image.Equals(null) || item.image.Equals(""))
+        {
+            Debug.LogWarning(item.name + " doesn't have an image applied");
+        }
+        gameObject.GetComponent<SpriteRenderer>().sprite = item.image;
 
-    public Item(string aName, int aCost) // A constructor that takes 2 arguments
-    {
-        name = aName;
-        cost = aCost;
-        description = name + " was not given a description.";
-    }
-
-    public Item(string aName, int aCost, string aDescription)
-    {
-        name = aName;
-        cost = aCost;
-        description = aDescription;
-    }
-
-    public int Sell()
-    {
-        return cost / 2;
     }
 }

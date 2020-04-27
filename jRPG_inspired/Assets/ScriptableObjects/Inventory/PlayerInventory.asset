@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11e8888b1442abd4984b93496a163235, type: 3}
-  m_Name: Rock
+  m_Script: {fileID: 11500000, guid: a1d26ea3b95cda5498efa0080cb5db91, type: 3}
+  m_Name: PlayerInventory
   m_EditorClassIdentifier: 
-  cost: 0
-  type: 3
-  image: {fileID: -7533619989755883434, guid: 0c0e10f633d07584d9dff71eed133580, type: 3}
-  description: 
+  Container:
+  - item: {fileID: 11400000, guid: aecc701a1d318ab439e26289a3e7f576, type: 2}
+    amount: 1

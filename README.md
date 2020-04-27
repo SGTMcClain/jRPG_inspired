@@ -2,166 +2,265 @@
 
 A game inspired by old school jRPGs to teach basics in Unity Game Development and C# programming.
 
-This project makes use of:
+Table of contents
 
-* [Spritesheets](#assets)
-* [Basic c# classes](#a-basic-class)
-* [UI Panel and Text](#ui-panel-and-text)
-* [Save & Load](#save-and-load)
+- [jRPG_inspired](#jrpginspired)
+  - [April 29, 2020](#april-29-2020)
+    - [Scriptable Object intro](#scriptable-object-intro)
+  - [April 22, 2020](#april-22-2020)
+    - [UI Panel and Text](#ui-panel-and-text)
+      - [Setting Up The UI](#setting-up-the-ui)
+      - [Hiding The UI Panel](#hiding-the-ui-panel)
+  - [April 22, 2019](#april-22-2019)
+    - [Save and Load](#save-and-load)
+      - [Getting Setup](#getting-setup)
+      - [PlayerPrefs](#playerprefs)
+  - [April 15, 2020](#april-15-2020)
+    - [A basic class](#a-basic-class)
+    - [Properties & Encapsulation](#properties--encapsulation)
+  - [Class Methods](#class-methods)
+    - [Constructors](#constructors)
+    - [Inheritance](#inheritance)
+  - [Credits](#credits)
+    - [Assets Used](#assets-used)
 
 ## April 29, 2020
+
+**Start on 11**
+
 ### Scriptable Object intro
 [Based On Unity3D - Inventory System w/Scriptable Objects by Coding with Unity](https://youtu.be/_IqTeruf3-s)
+  1. Create a new script called "ItemObject" and make it an abstract class and make it of type ScriptableObject
+      ```csharp
+      public abstract class ItemObject : ScriptableObject
+      {
+       
+      }
+     ```
+     as an abstract class this class can never be used, it is just a model for our base items.
+  2. Add an enumerated class at the top of script file called ItemType.  Your file should look like this
+     ```csharp
+      using System.Collections;
+      using System.Collections.Generic;
+      using UnityEngine;
 
-1. Create a new script called "ItemObject" and make it an abstract class and make it of type ScriptableObject
-    ```csharp
-    public abstract class ItemObject : ScriptableObject
-    {
-     
-    }
-   ```
-   as an abstract class this class can never be used, it is just a model for our base items.
-2. Add an enumerated class at the top of script file called ItemType.  Your file should look like this
-   ```csharp
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
+      public enum ItemType
+      {
+          Consumable,
+          Weapon,
+          Armor,
+          Default
 
-    public enum ItemType
-    {
-        Consumable,
-        Weapon,
-        Armor,
-        Default
+      }
+      public abstract class ItemObject : ScriptableObject
+      {
+          
+      }
+     ```
 
-    }
-    public abstract class ItemObject : ScriptableObject
-    {
-        
-    }
-   ```
-   1. Add a public Sprite named image, A public ItemType named type, a public int called cost, and a public string called description. Over description add "[TextArea(15,20)]" to establish a text area that is large enough in the inspector to fit a length description
-   ```csharp
-    public abstract class ItemObject : ScriptableObject
-    {
-        public Sprite image;
-        public ItemType type;
-        public int cost;
-        [TextArea(15, 20)]
-        public string description;
-        
-    }
+  3. Add a public Sprite named image, A public ItemType named type, a public int called cost, and a public string called description. Over description add "[TextArea(15,20)]" to establish a text area that is large enough in the inspector to fit a length description
 
-   ```
-3. Create a new script called DefaultItem
-4. Remove the Start() and Update Classes
-5. Replace Monobehavior with ScriptableObject
-6. Above the class name add:
-   ```csharp
-   [CreateAssetMenu(fileName = "New Default Item", menuName = "Inventory System/Items/Default")]
-   ```
-   This will allow us to create a new Default Item from the Create Menu in the Unity Editor
-7. Next we want to make sure the item type is set to Default every time we create this object and we will do that by adding the Awake() function to the DefaultItem class and having the type = ItemType.Default
-   ```csharp
-    public void Awake()
-    {
-        type = ItemType.Default;
-    }
-   ```
+      ```csharp
+      public abstract class ItemObject : ScriptableObject
+      {
+          public Sprite image;
+          public ItemType type;
+          public int cost;
+          [TextArea(15, 20)]
+          public string description;
+      }
 
-8. We can test this out by going to our Scriptable objects folder right clicking and going to Inventory System -> Items -> Default and then giving the new object a name a description and an image from your spritesheet.
-   
-9. Add another script for your ConsumableItem... It should be the same as the DeafultItem Class but add public ints for restoring health and magic values
-    ```csharp
-    [CreateAssetMenu(fileName = "New Consumable Item", menuName = "Inventory System/Items/Consumable")]
-    public class ConsumableItem : ItemObject
-    {
-        public int restoreHealthValue;
-        public int restoreMagicValue;
-        public void Awake()
-        {
-            type = ItemType.Consumable;
-        }
-    }
-    ```
-10. We could continue to make more items like Weapon or Armor in this same manner.
-11. Now we need to create an inventory for all of this stuff to go in so in the ScriptableObjects and add an Inventory folder then inside the Inventory folder add a Scripts folder
-12. inside of scipts create a new script called InventoryObject and replace Monobehavior with ScriptableObject then delete Start() and Update()
-13. Add:
-```csharp
-public List<InventorySlot> Container = new List<InventorySlot>();
-```
-To InventoryObject 
-14. Below the final closing bracket of InventoryObject create a new class called InventorySlot with the properties public ItemObject call item and a public in called amount.
-```csharp
-public class InventorySlot
-{
-    public ItemObject item;
-    public int amount;
-}
-```
+      ```
 
-15. Directly above InventorySlot add [System.Serializable] so that you can see Inventory Slot in the inspector
-16. Add a constructor that takes two arguments of ItemObject named item and int name amount, then assign those arguments to the classes variables
+  4. Create a new script called DefaultItem
+  5. Remove the Start() and Update Classes
+  6. Replace Monobehavior with ScriptableObject
+  7. Above the class name add:
 
-```csharp
-    public InventorySlot(ItemObject item, int amount)
-    {
-        this.item = item;
-        this.amount = amount;
-    }
-```
+     ```csharp
+     [CreateAssetMenu(fileName = "New Default Item", menuName = "Inventory System/Items/Default")]
+     ```
 
-17. Add a method to the InventorySlot class called AddAmount with one argument, an int called value. Inside the method should be amount += value.
+     This will allow us to create a new Default Item from the Create Menu in the Unity Editor
+  8. Next we want to make sure the item type is set to Default every time we create this object and we will do that by adding the Awake() function to the DefaultItem class and having the type = ItemType.Default
 
-```csharp
-    public void AddAmount(int value)
-    {
-        amount += value;
-    }
-```
+     ```csharp
+      public void Awake()
+      {
+          type = ItemType.Default;
+      }
+     ```
 
-18. Then create a method called AddItem with 2 arguments an ItemObject called _item and an int called _amount.
-19. Inside add item will be a bool called hasItem and set it to false
+  9. We can test this out by going to our Scriptable objects folder right clicking and going to Inventory System -> Items -> Default and then giving the new object a name a description and an image from your spritesheet.
 
-```csharp
-    bool hasItem = false;
-```
+  10. Add another script for your ConsumableItem... It should be the same as the DeafultItem Class but add public ints for restoring health and magic values
 
-20. Inside AddItem a for loop to test if the container already has one of the items, if it does then change hasItem to true then break out of the loop.
-21. If it doesn't contain one of the items after the loop write an if statement where if hasItem is false you add a new inventory slot with the _item and _amount as arguments
-22. The entire AddItem should look like this when you are done.
+      ```csharp
+      [CreateAssetMenu(fileName = "New Consumable Item", menuName = "Inventory System/Items/Consumable")]
+      public class ConsumableItem : ItemObject
+      {
+          public int restoreHealthValue;
+          public int restoreMagicValue;
+          public void Awake()
+          {
+              type = ItemType.Consumable;
+          }
+      }
+      ```
 
-```csharp
-    public void AddItem(ItemObject _item, int _amount)
-    {
-        // Check  if item is in the inventory
-        bool hasItem = false;
-        for(int i = 0; i < Container.Count; i++)
-        {
-            if(Container[i].item == _item)
-            {
-                Container[i].AddAmount(_amount);
-                hasItem = true;
-                break;
-            }
-        }
-        if(!hasItem)
-        {
-            Container.Add(new InventorySlot(_item, _amount));
-        }
-    }
-```
+  11. We could continue to make more items like Weapon or Armor in this same manner.
 
-23. Create a new menu item by adding:
+  12. Now we need to create an inventory for all of this stuff to go in so in the ScriptableObjects and add an Inventory folder then inside the Inventory folder add a Scripts folder
+  13. inside of scripts create a new script called InventoryObject and replace Monobehavior with ScriptableObject then delete Start() and Update()
 
-```csharp
-    [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
-```
-On top of the InventoryObject class
+  14. Add:
 
-24. Now you can create a new Inventory inside your inventory folder and call it "PlayerInventory"
+      ```csharp
+      public List<InventorySlot> Container = new List<InventorySlot>();
+      ```
 
+      To InventoryObject
+
+  15. Below the final closing bracket of InventoryObject create a new class called InventorySlot with the properties public ItemObject call item and a public in called amount.
+
+      ```csharp
+      public class InventorySlot
+      {
+          public ItemObject item;
+          public int amount;
+      }
+      ```
+
+  16. Directly above InventorySlot add [System.Serializable] so that you can see Inventory Slot in the inspector
+  17. Add a constructor that takes two arguments of ItemObject named item and int name amount, then assign those arguments to the classes variables
+
+      ```csharp
+          public InventorySlot(ItemObject givenItem, int givenAmount)
+          {
+              item = givenItem;
+              amount = givenAmount;
+          }
+      ```
+
+  18. Add a method to the InventorySlot class called AddAmount with one argument, an int called value. Inside the method should be amount += value.
+
+      ```csharp
+          public void AddAmount(int value)
+          {
+              amount += value;
+          }
+      ```
+
+  19. Then create a method called AddItem with 2 arguments an ItemObject called _item and an int called _amount.
+
+      ```csharp
+      public void AddItem(ItemObect givenItem, int givenAmount)
+      {
+
+      }
+      ```
+
+  20. Inside add item will be a bool called hasItem and set it to false
+
+      ```csharp
+          bool hasItem = false;
+      ```
+
+  21. Inside AddItem a for loop to test if the container already has one of the items, if it does then change hasItem to true then break out of the loop.
+  22. If it doesn't contain one of the items after the loop write an if statement where if hasItem is false you add a new inventory slot with the givenItem and givenAmount as arguments
+  23. The entire AddItem should look like this when you are done.
+
+      ```csharp
+          public void AddItem(ItemObject givenItem, int givenAmount)
+          {
+              bool hasItem = false;
+
+              for (int i = 0; i < Container.Count; i++)
+              {
+                  // Adds to the items counter if it already exists in inventory
+                  if (Container[i].item == givenItem)
+                  {
+                      hasItem = true;
+                      Container[i].AddAmount(givenAmount);
+                      break;
+                  }
+              }
+              // Adds the item if it isn't in the inventory
+              if (!hasItem)
+              {
+                  Container.Add(new InventorySlot(givenItem, givenAmount));
+              }
+          }
+
+      ```
+
+  24. Create a new menu item for the inventory by adding:
+
+      ```csharp
+          [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
+      ```
+
+      On top of the InventoryObject class
+  25. Now you can create a new Inventory inside your inventory folder and call it "PlayerInventory" using the Create menu.
+  26. Lets add a player manager to our Player!  In the root "Scripts" folder add a new C# Script called "PlayerManager"
+  27. Above Start() add:
+
+      ```csharp
+      public InventoryObject inventory;
+      ```
+
+  28. To prevent namespace collisions please remove "Item.cs" "Weapon.cs" "Armor.cs" and "Consumable.cs"
+  29. Create a new Item.cs in the root Scripts folder then remove Start() and Update() and add:
+
+      ```csharp
+      public ItemObject item
+      ```
+
+  30. In Unity Create a new "Sprite" in your scene and rename it "Item"
+  31. Add a 2DBoxCollider to Item in the inspector
+  32. Give the Item an icon using the dropdown on the left of the Item name in the inspector.  These icons can be used as placholders in edit mode and they will disappear in play mode.
+  33. Since our scriptable objects have images lets use those at runtime to replace the icon when the game goes into playmode.  Lets also give ourselves a warning in case we create an item with no image.  Using the Awake() method in the monobehavior class will allow us to assign the image from our Scriptable Object directly to the items we make.
+
+      ```csharp
+          private void Awake()
+          {
+              if (item.image.Equals(null) || item.image.Equals(""))
+              {
+                  Debug.LogWarning(item.name + " doesn't have an image applied");
+              }
+              gameObject.GetComponent<SpriteRenderer>().sprite = item.image;
+
+          }
+      ```
+
+  34. On the PlayerManager script we want to check for collision events and if it is an item add that item to our inventory:
+
+      ```csharp
+          public void OnTriggerEnter2D(Collider2D collision)
+          {
+              var item = collision.GetComponent<Item>();
+              if (item)
+              {
+                  inventory.AddItem(item.item, 1);
+                  Destroy(collision.gameObject);
+              }
+          }
+      ```
+
+  35. Back in Unity click the box next to the Item gameobject's BoxCollider2D IsTrigger (it should now have a check in the box)
+  36. Also make sure the 2Dcolliders size surrounds the sprite
+  37. Now add the Rock Scriptable object to the Item
+  38. When you play your scene you should be able to move your player into the item and see the inventory increase by 1 item which should be your rock.
+  39. If you test this a few times you will notice that the inventory never clears.  To fix this we need to add ending logic to our PlayerManager in a new method.
+
+      ```csharp
+          public void OnApplicationQuit()
+          {
+              inventory.Container.Clear();
+          }
+      ```
+
+  40. Now add a few more items and test out the inventory!! Everything should be working perfectly
 
 ## April 22, 2020
 
@@ -169,7 +268,8 @@ On top of the InventoryObject class
 
 We are going to create a simple UI Panel and Text that will display the players X and Y location on screen and make the panel appear and disappear on a button press
 
-**Setting Up The UI**
+#### Setting Up The UI
+
 1. Add a UI Panel element
 2. Click 'Canvas' and In the inspector Change the Canvas Render Mode to "Screen Space - Camera"
 3. Drag the Main Camera onto the Render Camera
@@ -190,22 +290,28 @@ We are going to create a simple UI Panel and Text that will display the players 
 18. Drag the GameManager script onto the GameManager GameObject
 19. Open the Game Manager Script in your IDE (Visual Studio)
 20. At the very top of the script add
+
     ```csharp
     using UnityEngine.UI;
     ```
+
 21. After the class declaration right inside the first curly braces add
+
     ```csharp
     public GameObject player;
     public Text displayX;
     public Text displayY;
     ```
+
 22. Inside void Update() Add
+
     ```csharp
     string xText = player.transform.position.x.ToString();
     string yText = player.transform.position.y.ToString();
     displayX.text = "X: " + xText;
     displayY.text = "Y: " + yText;
     ```
+
 23. Click on the GameManager game object and drag Display_X_Text into Display X in the inspector
 24. Drag Display_Y_Text into Display Y in the inspector
 25. Drag the Player onto Player in the inspector
@@ -230,53 +336,58 @@ We are going to create a simple UI Panel and Text that will display the players 
 
     This helps us keep the Update method clean and our code reusable
 
-**Hiding The UI Panel**
+#### Hiding The UI Panel
 
 Now we don't want to always display this information so lets hide it with a button press.
 
 1. Rename the Canvas to TopUI_Canvas
 2. Directly under Text displayY Add:
+
     ```csharp
-    public Canvas TopUI;
-   ```
+    public GameObject TopUI;
+    ```
+
 3. Then in Update() Add:
-   ```csharp
-    if (Input.GetKeyDown(KeyCode.M))
-    {
-        //Toggle TopUI
-        if (!TopUI.activeSelf)
+
+    ```csharp
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            TopUI.SetActive(true);
+            //Toggle TopUI
+            if (!TopUI.activeSelf)
+            {
+                TopUI.SetActive(true);
+            }
+            else
+            {
+                TopUI.SetActive(false);
+            }
         }
-        else
-        {
-            TopUI.SetActive(false);
-        }
-    }
-   ```
-This sets the GameManager up to listen for the user to press 'M' and when it hears it our script checks if the TopUI is active and then turns it off if it is active or turns it on if it is inactive.
+    ```
+
+    This sets the GameManager up to listen for the user to press 'M' and when it hears it our script checks if the TopUI is active and then turns it off if it is active or turns it on if it is inactive
+
 4. Lets turn off the TopUI_Canvas by clearing the check mark next to its name in the inspector.
 5. Lets test to see if our code execute properly
 6. If everything went well lets clean up the Update() method again by creating a ToggleCanvas() method
 
-```csharp
-    void ToggleCanvas()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
+    ```csharp
+        void ToggleCanvas()
         {
-            // Toggle Top UI
-            if (!TopUI.activeSelf) // if the Top UI is not active
+            if (Input.GetKeyDown(KeyCode.M))
             {
-                TopUI.SetActive(true); // Show the Canvas
-            }
-            else
-            {
-                TopUI.SetActive(false); // Hide the Canvas
-            }
+                // Toggle Top UI
+                if (!TopUI.activeSelf) // if the Top UI is not active
+                {
+                    TopUI.SetActive(true); // Show the Canvas
+                }
+                else
+                {
+                    TopUI.SetActive(false); // Hide the Canvas
+                }
 
+            }
         }
-    }
-```
+    ```
 
 7. And placing the statement we just wrote into that method
 
@@ -284,16 +395,18 @@ This sets the GameManager up to listen for the user to press 'M' and when it hea
     ToggleCanvas();
     ```
 
+## April 22, 2019
+
 ### Save and Load
 
-**Getting Setup**
+#### Getting Setup
 
-1. Lets make the TopUI_Canvas active again by checking the box next to it's name in the inspector
-2. Add a UI Button
-3. Press the arrow and then click text and change the Text(Script) in the inspector to Save.  Also change the Button name from Button to Save_Button
-4. Duplicate Save_Button and change the Text Script to Load and change the Button name from Save_Button to Load_Button
-5. Set Save_Button Pos X to 300 and Pos Y to 250
-6. Set Load Button Pos X to 300 and Pos Y to 200
+ 1. Lets make the TopUI_Canvas active again by checking the box next to it's name in the inspector
+ 2. Add a UI Button
+ 3. Press the arrow and then click text and change the Text(Script) in the inspector to Save.  Also change the Button name from Button to Save_Button
+ 4. Duplicate Save_Button and change the Text Script to Load and change the Button name from Save_Button to Load_Button
+ 5. Set Save_Button Pos X to 300 and Pos Y to 250
+ 6. Set Load Button Pos X to 300 and Pos Y to 200
 
 #### PlayerPrefs
 
@@ -337,7 +450,6 @@ Next press the "No Function" dropdown and Select GameManager -> Save().  Then re
 Thats it you are now saving and loading from player prefs.  You can add more properties to this setup if you choose.
 
 Make sure to make the canvas inactive again so that it hidden when you start your game.
-
 
 ## April 15, 2020
 
@@ -556,8 +668,12 @@ public class Weapon : Item
     }
 }
 ```
+
 -----------------
-## Assets
+
+## Credits
+
+### Assets Used
 
 **Free RPG World Tileset 32 x 32, 40 x 40, 48 x 48**
 **Author: Pipoya**

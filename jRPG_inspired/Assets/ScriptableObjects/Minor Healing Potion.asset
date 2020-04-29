@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4487910be14221241b7a6191c773689d, type: 3}
   m_Name: Minor Healing Potion
   m_EditorClassIdentifier: 
+  name: Minor Healing Potion
   cost: 10
   type: 0
   prefab: {fileID: 1349370366350218439, guid: fb37c4dd4fbe982429be6d01be2e6327, type: 3}

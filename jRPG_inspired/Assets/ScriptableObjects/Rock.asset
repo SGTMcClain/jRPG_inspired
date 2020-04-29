@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e8888b1442abd4984b93496a163235, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
+  name: Rock
   cost: 0
   type: 3
+  prefab: {fileID: 0}
   image: {fileID: -7533619989755883434, guid: 0c0e10f633d07584d9dff71eed133580, type: 3}
   description: 

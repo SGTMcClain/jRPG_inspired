@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class ItemObject : ScriptableObject
 {
+    public string name;
     public int cost;
     public ItemType type;
     public GameObject prefab;

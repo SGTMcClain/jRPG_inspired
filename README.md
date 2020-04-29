@@ -277,7 +277,7 @@ Lets cleanup our inspector a little.
 8. Put 'Display_X_Text' and 'Display_Y_Text' in 'Location_Text'
 9. Move the Save and Load Buttons to inside of the TopUI_Panel
 
-Creating the inventory panel
+#### Creating the inventory panel
 
 1. Lets put the inventory on a panel of it's own.  This should keep out inventory from running into the text and the buttons.
 2. Create a new panel inside of the TopUI_Panel -> Panel and name it Inventory_Panel
@@ -293,11 +293,16 @@ Creating the inventory panel
    2. Change the Outline to have a thickness of .01
    3. drag the points of the text box to the edges of the square
       1. or you can set the height and width to 32
-   4. Center you text using the center and middle Alignment
+   4. Center your text using the center and middle alignment button
    5. Rename the Image to Inventory_Space
    6. Drag Inventory_Space to the Prefabs folder
    7. Delete Inventory_Space from Inventory Panel
-   8. Remove any other prefabs that may be in the folder
+   8. Make a few copies of Inventory_Space in inventory using the prefab variant system
+      1. Right click on Inventory_Space and select Create -> Prefab Variant
+
+#### Display Inventory Script
+   9.  In Inventory/Scripts create a new script called DisplayInventory
+   10. 
 
 ## April 22, 2020
 

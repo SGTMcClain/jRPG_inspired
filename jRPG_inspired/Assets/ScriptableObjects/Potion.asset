@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4487910be14221241b7a6191c773689d, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
+  name: Potion
   cost: 0
   type: 0
+  prefab: {fileID: 0}
   image: {fileID: 0}
   description: 
   healthRegen: 0

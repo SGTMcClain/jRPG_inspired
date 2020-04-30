@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4487910be14221241b7a6191c773689d, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: 
-  cost: 0
+  cost: 30
   type: 0
-  image: {fileID: 0}
-  description: 
-  healthRegen: 0
+  image: {fileID: -5354769454374499836, guid: 0c0e10f633d07584d9dff71eed133580, type: 3}
+  description: A potion
+  healthRegen: 20
   manaRegen: 0
